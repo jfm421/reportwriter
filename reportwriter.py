@@ -5,6 +5,10 @@ import openai
 API_KEY = st.secrets["openai"]["api_key"]
 openai.api_key = API_KEY
 
+# Use Streamlit's secrets management
+API_KEY = st.secrets["openai"]["api_key"]
+openai.api_key = API_KEY
+
 def check_api_status():
     url = "https://api.openai.com/v1/engines"
     headers = {"Authorization": f"Bearer {API_KEY}"}
