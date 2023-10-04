@@ -38,7 +38,7 @@ def parse_toc_input(toc_input):
     return toc_dict
 
 def generate_report(text_data, toc, model, custom_instructions):
-    model_name = "text-davinci-002" if model == "GPT-3.5 Turbo" else "gpt-3.5-turbo"
+    model_name = "gpt-3.5-turbo" if model == "GPT-3.5 Turbo" else "gpt-4"  # Adjust the model names accordingly
     
     # Constructing the prompt
     prompt = f"{custom_instructions}\n\nCreate a report from the following data:\n{text_data}\n"
@@ -48,9 +48,12 @@ def generate_report(text_data, toc, model, custom_instructions):
     st.text(f"Prompt: {prompt}")  # Debugging line to display the prompt
     
     try:
-        response = openai.Completion.create(
-            engine=model_name,
-            prompt=prompt,
+        response = openai.ChatCompletion.create(
+            model=model_name,
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": prompt}
+            ],
             max_tokens=2000  # Set an arbitrary limit
         )
         report = response['choices'][0]['text'].strip()
