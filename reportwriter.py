@@ -66,33 +66,41 @@ st.title("Report Writer")
 # Call the function to check API status
 status, message = check_api_status()
 if not status:
-    st.error(message)
     st.markdown(
-        """<style>
-        .red-circle {
+        f"""
+        <style>
+        .red-circle {{
             width: 20px;
             height: 20px;
             border-radius: 50%;
             background-color: red;
             display: inline-block;
-        }
+        }}
         </style>
-        <span class="red-circle"></span>""",
+        <div>
+            <span class="red-circle"></span>
+            {message}
+        </div>
+        """,
         unsafe_allow_html=True,
     )
 else:
-    st.success(message)
     st.markdown(
-        """<style>
-        .green-circle {
+        f"""
+        <style>
+        .green-circle {{
             width: 20px;
             height: 20px;
             border-radius: 50%;
             background-color: green;
             display: inline-block;
-        }
+        }}
         </style>
-        <span class="green-circle"></span>""",
+        <div>
+            <span class="green-circle"></span>
+            {message}
+        </div>
+        """,
         unsafe_allow_html=True,
     )
 
