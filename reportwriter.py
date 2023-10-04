@@ -5,6 +5,17 @@ import openai
 API_KEY = st.secrets["openai"]["api_key"]
 openai.api_key = API_KEY
 
+def check_api_status():
+    url = "https://api.openai.com/v1/engines"
+    headers = {"Authorization": f"Bearer {API_KEY}"}
+
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()  # Will raise an HTTPError for bad responses (4xx and 5xx)
+        return True, "The API is online and accessible."
+    except requests.RequestException as e:
+        return False, f"Failed to access the API: {str(e)}"
+        
 def parse_toc_input(toc_input):
     sections = toc_input.strip().split('\n')
     toc_dict = {}
@@ -46,6 +57,39 @@ def generate_report(text_data, toc, model, custom_instructions):
 
 
 st.title("Report Writer")
+
+# Call the function to check API status
+status, message = check_api_status()
+if not status:
+    st.error(message)
+    st.markdown(
+        """<style>
+        .red-circle {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: red;
+            display: inline-block;
+        }
+        </style>
+        <span class="red-circle"></span>""",
+        unsafe_allow_html=True,
+    )
+else:
+    st.success(message)
+    st.markdown(
+        """<style>
+        .green-circle {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: green;
+            display: inline-block;
+        }
+        </style>
+        <span class="green-circle"></span>""",
+        unsafe_allow_html=True,
+    )
 
 uploaded_file = st.file_uploader("Choose a text file", type="txt")
 
