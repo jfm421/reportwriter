@@ -30,10 +30,13 @@ def generate_report(text_data, toc, model):
     for title, limit in toc.items():
         prompt += f"\nTitle: {title}\nWord Limit: {limit}\n"
     
-    try:
-        response = openai.Completion.create(
-            engine=model_name,
-            prompt=prompt,
+       try:
+        response = openai.ChatCompletion.create(
+            model=model_name,
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": prompt}
+            ],
             max_tokens=2000  # Set an arbitrary limit
         )
         report = response['choices'][0]['text'].strip()
