@@ -37,7 +37,7 @@ def parse_toc_input(toc_input):
     return toc_dict
 
 def generate_report(text_data, toc, model, custom_instructions):
-    model_name = "gpt-3.5-turbo-16k" if model == "gpt-3.5-turbo-16k" else "gpt-4"  
+    model_name = "gpt-3.5-turbo-16k" if model == "GPT-3.5 Turbo" else "gpt-4"
     
     # Constructing the prompt
     prompt = f"{custom_instructions}\n\nCreate a report from the following data:\n{text_data}\n"
@@ -130,7 +130,7 @@ toc_input = st.text_area("Enter your table of contents with word limits (e.g., I
 st.subheader("Custom Instructions")
 custom_instructions = st.text_area("Enter any custom instructions for the report generation:")
 
-model_choice = st.selectbox("Select Model", ["GPT-3.5 Turbo", "GPT-4"])
+model_choice = st.selectbox("Select Model", ["gpt-3.5-turbo-16k", "GPT-4"])
 
 
 report = None  # Define report variable at the top of your script
