@@ -21,7 +21,7 @@ def parse_toc_input(toc_input):
             return None
     return toc_dict
 
-def generate_report(text_data, toc, model):
+def generate_report(text_data, toc, model, custom_instructions):
     
     model_name = "gpt-3.5-turbo" if model == "GPT-3.5 Turbo" else "gpt-4" 
     
@@ -62,7 +62,7 @@ if st.button("Generate Report"):
         text_data = uploaded_file.read().decode("utf-8")
         toc = parse_toc_input(toc_input)
         if toc is not None:
-            report = generate_report(text_data, toc, model_choice, custom_instructions)
+            report = generate_report(text_data, toc, model_choice, custom_instructions)  
             st.text(report)
         else:
             st.error("Failed to parse Table of Contents input.")
