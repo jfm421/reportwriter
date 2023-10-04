@@ -22,7 +22,6 @@ def parse_toc_input(toc_input):
     return toc_dict
 
 def generate_report(text_data, toc, model):
-    openai.api_key = 'your-api-key'  # Handle this securely
     
     model_name = "gpt-3.5-turbo" if model == "GPT-3.5 Turbo" else "gpt-4" 
     
