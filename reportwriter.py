@@ -6,19 +6,19 @@ API_KEY = st.secrets["openai"]["api_key"]
 openai.api_key = API_KEY
 
 def parse_toc_input(toc_input):
-    sections = toc_input.split(' ')
+    sections = toc_input.strip().split('\n')
     toc_dict = {}
     for section in sections:
         parts = section.split(':')
         if len(parts) != 2:
             st.error(f"Invalid section format: {section}. Please follow the format 'Title:WordLimit'")
-            return None  # or you might want to raise an exception
+            return None
         title, word_limit = parts
         try:
             toc_dict[title.strip()] = int(word_limit.strip())
         except ValueError:
-            st.error(f"Invalid word limit: {word_limit}. Word limit should be an integer.")
-            return None  # or you might want to raise an exception
+            st.error(f"Invalid word limit in section '{title}': {word_limit}. Word limit should be an integer.")
+            return None
     return toc_dict
 
 def generate_report(text_data, toc, model):
