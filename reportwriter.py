@@ -37,7 +37,7 @@ def parse_toc_input(toc_input):
     return toc_dict
 
 def generate_report(text_data, toc, model, custom_instructions):
-    model_name = "gpt-3.5-turbo" if model == "GPT-3.5 Turbo" else "gpt-4"  
+    model_name = "gpt-3.5-turbo-16k" if model == "gpt-3.5-turbo-16k" else "gpt-4"  
     
     # Constructing the prompt
     prompt = f"{custom_instructions}\n\nCreate a report from the following data:\n{text_data}\n"
