@@ -1,10 +1,8 @@
 import streamlit as st
 import openai
 import requests
+from docx import Document
 
-# Use Streamlit's secrets management
-API_KEY = st.secrets["openai"]["api_key"]
-openai.api_key = API_KEY
 
 # Use Streamlit's secrets management
 API_KEY = st.secrets["openai"]["api_key"]
@@ -62,6 +60,19 @@ def generate_report(text_data, toc, model, custom_instructions):
         st.error(f"Failed to generate report: {str(e)}")
         return None
 
+def export_report(report, file_format):
+    if file_format == 'Word':
+        doc = Document()
+        doc.add_paragraph(report)
+        file_path = 'report.docx'
+        doc.save(file_path)
+    else:
+        file_path = 'report.txt'
+        with open(file_path, 'w') as file:
+            file.write(report)
+    
+    return file_path
+
 
 st.title("Report Writer")
 
@@ -116,14 +127,17 @@ custom_instructions = st.text_area("Enter any custom instructions for the report
 
 model_choice = st.selectbox("Select Model", ["GPT-3.5 Turbo", "GPT-4"])
 
+
 if st.button("Generate Report"):
     if uploaded_file is not None and toc_input:
         text_data = uploaded_file.read().decode("utf-8")
         toc = parse_toc_input(toc_input)
-        if toc is not None:
-            report = generate_report(text_data, toc, model_choice, custom_instructions)  
-            st.text(report)
+        report = generate_report(text_data, toc, model_choice, custom_instructions)
+        if report:
+            st.markdown(f"## Report\n```{report}```")  # Markdown rendering of the report
+            export_format = st.selectbox("Export Format", ["Word", "Text"])
+            if st.button("Export Report"):
+                file_path = export_report(report, export_format)
+                st.markdown(f"Report exported: [Download here]({file_path})")
         else:
-            st.error("Failed to parse Table of Contents input.")
-    else:
-        st.warning("Please provide all necessary inputs.")
+            st.warning("Failed to generate report. Please check your inputs.")
