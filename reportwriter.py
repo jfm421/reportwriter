@@ -1,6 +1,10 @@
 import streamlit as st
 import openai
 
+# Use Streamlit's secrets management
+API_KEY = st.secrets["openai"]["api_key"]
+openai.api_key = API_KEY
+
 def parse_toc_input(toc_input):
     sections = toc_input.split(',')
     toc_dict = {}
