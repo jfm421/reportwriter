@@ -38,7 +38,7 @@ def parse_toc_input(toc_input):
     return toc_dict
 
 def generate_report(text_data, toc, model, custom_instructions):
-    model_name = "gpt-3.5-turbo" if model == "GPT-3.5 Turbo" else "gpt-4"  # Adjust the model names accordingly
+    model_name = "gpt-3.5-turbo" if model == "GPT-3.5 Turbo" else "gpt-4"  
     
     # Constructing the prompt
     prompt = f"{custom_instructions}\n\nCreate a report from the following data:\n{text_data}\n"
@@ -56,7 +56,7 @@ def generate_report(text_data, toc, model, custom_instructions):
             ],
             max_tokens=2000  # Set an arbitrary limit
         )
-        report = response['choices'][0]['text'].strip()
+        report = response['choices'][0]['message']['content']  
         return report
     except Exception as e:
         st.error(f"Failed to generate report: {str(e)}")
