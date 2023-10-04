@@ -1,4 +1,4 @@
 streamlit
 openai
 requests
-docx
+python-docx
