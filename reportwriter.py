@@ -9,8 +9,16 @@ def parse_toc_input(toc_input):
     sections = toc_input.split(',')
     toc_dict = {}
     for section in sections:
-        title, word_limit = section.split(':')
-        toc_dict[title.strip()] = int(word_limit.strip())
+        parts = section.split(':', 1)  # Only split on the first colon
+        if len(parts) != 2:
+            st.error(f"Invalid section format: {section}. Please follow the format 'Title:WordLimit'")
+            return None  # or you might want to raise an exception
+        title, word_limit = parts
+        try:
+            toc_dict[title.strip()] = int(word_limit.strip())
+        except ValueError:
+            st.error(f"Invalid word limit: {word_limit}. Word limit should be an integer.")
+            return None  # or you might want to raise an exception
     return toc_dict
 
 def generate_report(text_data, toc, model):
