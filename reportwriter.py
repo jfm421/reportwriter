@@ -1,7 +1,7 @@
 import streamlit as st
 import openai
 import requests
-import base64
+import os
 from docx import Document
 
 
@@ -140,10 +140,16 @@ if st.button("Generate Report"):
         report = generate_report(text_data, toc, model_choice, custom_instructions)
         if report:
             st.markdown(f"## Report\n```{report}```")  # Markdown rendering of the report
-        export_format = st.selectbox("Export Format", ["Word", "Text"])
-        if st.button("Export Report"):
-            file_path = export_report(report, export_format)
-            file_content = get_file_content(file_path)
-            b64_file = base64.b64encode(file_content).decode()  # Encode file to base64
-            file_download_link = f'<a href="data:application/octet-stream;base64,{b64_file}" download="{file_path}">Download {file_path}</a>'
-            st.markdown(file_download_link, unsafe_allow_html=True)
+export_format = st.selectbox("Export Format", ["Word", "Text"])
+if st.button("Export Report"):
+    file_path = export_report(report, export_format)
+    
+    with open(file_path, "rb") as file:
+        file_bytes = file.read()
+    
+    st.download_button(
+        label=f"Download {file_path}",
+        data=file_bytes,
+        file_name=file_path,
+        mime="application/octet-stream"
+    )
