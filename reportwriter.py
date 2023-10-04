@@ -30,7 +30,7 @@ def generate_report(text_data, toc, model):
     for title, limit in toc.items():
         prompt += f"\nTitle: {title}\nWord Limit: {limit}\n"
     
-       try:
+    try:
         response = openai.ChatCompletion.create(
             model=model_name,
             messages=[
@@ -43,6 +43,7 @@ def generate_report(text_data, toc, model):
         return report
     except Exception as e:
         return str(e)
+
 
 st.title("Report Writer")
 
