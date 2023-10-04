@@ -26,7 +26,7 @@ def generate_report(text_data, toc, model):
     model_name = "gpt-3.5-turbo" if model == "GPT-3.5 Turbo" else "gpt-4" 
     
     # Constructing the prompt
-    prompt = f"Create a report from the following data:\n{text_data}\n"
+    prompt = f"{custom_instructions}\n\nCreate a report from the following data:\n{text_data}\n"
     for title, limit in toc.items():
         prompt += f"\nTitle: {title}\nWord Limit: {limit}\n"
     
@@ -52,13 +52,19 @@ uploaded_file = st.file_uploader("Choose a text file", type="txt")
 st.subheader("Table of Contents")
 toc_input = st.text_area("Enter your table of contents with word limits (e.g., Introduction:300, Methods:500)")
 
+st.subheader("Custom Instructions")
+custom_instructions = st.text_area("Enter any custom instructions for the report generation:")
+
 model_choice = st.selectbox("Select Model", ["GPT-3.5 Turbo", "GPT-4"])
 
 if st.button("Generate Report"):
     if uploaded_file is not None and toc_input:
         text_data = uploaded_file.read().decode("utf-8")
         toc = parse_toc_input(toc_input)
-        report = generate_report(text_data, toc, model_choice)
-        st.text(report)
+        if toc is not None:
+            report = generate_report(text_data, toc, model_choice, custom_instructions)
+            st.text(report)
+        else:
+            st.error("Failed to parse Table of Contents input.")
     else:
         st.warning("Please provide all necessary inputs.")
