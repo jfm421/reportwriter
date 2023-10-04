@@ -6,10 +6,10 @@ API_KEY = st.secrets["openai"]["api_key"]
 openai.api_key = API_KEY
 
 def parse_toc_input(toc_input):
-    sections = toc_input.split(',')
+    sections = toc_input.split(' ')
     toc_dict = {}
     for section in sections:
-        parts = section.split(':', 1)  # Only split on the first colon
+        parts = section.split(':')
         if len(parts) != 2:
             st.error(f"Invalid section format: {section}. Please follow the format 'Title:WordLimit'")
             return None  # or you might want to raise an exception
