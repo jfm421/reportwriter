@@ -133,15 +133,19 @@ custom_instructions = st.text_area("Enter any custom instructions for the report
 model_choice = st.selectbox("Select Model", ["GPT-3.5 Turbo", "GPT-4"])
 
 
+report = None  # Define report variable at the top of your script
+
 if st.button("Generate Report"):
     if uploaded_file is not None and toc_input:
         text_data = uploaded_file.read().decode("utf-8")
         toc = parse_toc_input(toc_input)
-        report = generate_report(text_data, toc, model_choice, custom_instructions)
-        if report:
-            st.markdown(f"## Report\n```{report}```")  # Markdown rendering of the report
+        report = generate_report(text_data, toc, model_choice, custom_instructions)  # Update report variable
+        st.text(report)
+    else:
+        st.warning("Please provide all necessary inputs.")
+
 export_format = st.selectbox("Export Format", ["Word", "Text"])
-if st.button("Export Report"):
+if st.button("Export Report") and report:
     file_path = export_report(report, export_format)
     
     with open(file_path, "rb") as file:
