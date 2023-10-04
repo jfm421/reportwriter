@@ -136,8 +136,6 @@ if st.button("Generate Report"):
         if report:
             st.markdown(f"## Report\n```{report}```")  # Markdown rendering of the report
             export_format = st.selectbox("Export Format", ["Word", "Text"])
-            if st.button("Export Report"):
-                file_path = export_report(report, export_format)
-                st.markdown(f"Report exported: [Download here]({file_path})")
-        else:
-            st.warning("Failed to generate report. Please check your inputs.")
+        if st.button("Export Report"):
+            file_path = export_report(report, export_format)
+            st.markdown(f"Report exported: [Download here]({file_path})")
